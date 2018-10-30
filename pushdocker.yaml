@@ -1,0 +1,35 @@
+- name: push docker image to AWS ECR Sample
+  hosts: localhost
+  tasks:
+    - name: install docker-py for build docker
+      pip:
+        name: boto3
+        state: present
+
+    - name: build docker image
+      docker_image: 
+        path: "{{ docker_build_directory }}"
+        name: "{{ image_name }}"
+        tag: "{{ image_version }}"
+
+    - name: docker login (must `--no-include-email`)
+      shell: "$(aws ecr get-login --region {{ region }} --no-include-email)"
+      args:
+        executable: /bin/bash
+
+    - name: add tag
+      docker_image:
+        name: "{{ image_name }}:{{ image_version }}"
+        repository: "{{ ecr_repo_repositoryUri }}"
+        tag: "{{ ecr_repo_repositoryUri }}:{{ image_version }}"
+
+    - name: push image to ecr
+      docker_image:
+        name: "{{ ecr_repo_repositoryUri }}:{{ image_version }}"
+        push: yes
+  vars:
+    docker_build_directory: /home/ubuntu/source
+    image_name: funnel 
+    image_version: 1
+    ecr_repo_repositoryUri: 892867301607.dkr.ecr.us-east-1.amazonaws.com/funnel 
+    region: us-east-1

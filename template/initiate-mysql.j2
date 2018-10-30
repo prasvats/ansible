@@ -1,0 +1,10 @@
+#!/bin/bash
+#set -e 
+#set -o pipefail
+cd "{{ base_path }}/{{ user_id }}/scripts/mysql"
+aws s3 cp {{ s3_url_db }} /tmp/.
+source /home/ubuntu/.bashrc
+sed 's#https://saharsh007.kwikfunnels.com#{{ site_protocol }}://{{ user_id }}.{{ domain_name }}#g' /tmp/database.sql > /tmp/{{ user_id }}.sql
+mysql  --port=3306 -umysore -pchandni985 -hprivatefunneldb.cuxinecb6roo.us-east-1.rds.amazonaws.com < mysql-base.sql
+mysql  --port=3306 -umysore -pchandni985 -hprivatefunneldb.cuxinecb6roo.us-east-1.rds.amazonaws.com < personalize-db.sql
+rm -rf /tmp/{{ user_id }}.sql

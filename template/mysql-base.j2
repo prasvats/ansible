@@ -1,0 +1,5 @@
+create database if not exists {{ user_id }};
+grant all on {{ user_id }}.* to '{{ user_id }}'@'%' identified by '{{ db_password }}';
+grant all on {{ user_id }}.* to '{{ user_id }}'@'localhost' identified by '{{ db_password }}';
+use  {{ user_id }};
+\. /tmp/{{ user_id }}.sql

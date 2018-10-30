@@ -1,0 +1,91 @@
+- hosts: localhost
+  tasks:
+      - name: Creates Script Directory for MySQL
+        file: 
+          path: "{{ base_path }}/{{ user_id }}/scripts/mysql" 
+          state: directory
+          owner: "{{ file_owner }}"
+          group: "{{ file_group }}" 
+          mode: 0777 
+      - template:
+          src: template/mysql-base.j2
+          dest: "{{ base_path }}/{{ user_id }}/scripts/mysql/mysql-base.sql"
+          owner:  "{{ file_owner }}"
+          group:  "{{ file_group }}"
+          mode: 0777
+          force: yes
+      - template:
+          src: template/personal-mysql.j2
+          dest: "{{ base_path }}/{{ user_id }}/scripts/mysql/personalize-db.sql"
+          owner:  "{{ file_owner }}"
+          group:  "{{ file_group }}"
+          mode: 0777
+          force: yes
+      - template:
+          src: template/initiate-mysql.j2
+          dest: "{{ base_path }}/{{ user_id }}/scripts/mysql/mysql.sh"
+          owner:  "{{ file_owner }}"
+          group:  "{{ file_group }}"
+          mode: 0777
+          force: yes
+      - name: creating upload directory
+        file:
+          path: "{{ base_path }}/{{ user_id }}/wp-content/uploads" 
+          state: directory
+          owner: "{{ file_owner }}"
+          group: "{{ file_group }}" 
+          mode: 0777 
+      - file:
+          path: "{{ base_path }}/{{ user_id }}/sites-enabled" 
+          state: directory
+          owner: "{{ file_owner }}"
+          group: "{{ file_group }}" 
+          mode: 0777 
+      - template:
+          src: template/content-apache.j2
+          dest: "{{ base_path }}/{{ user_id }}/scripts/upload-copy.sh"
+          owner:  "{{ file_owner }}"
+          group:  "{{ file_group }}"
+          mode: 0777
+          force: yes
+      - name: terraform tfvars
+        template:
+          src: template/terraform-service.j2
+          dest: "{{ base_path }}/{{ user_id }}/scripts/{{ user_id }}-service.tfvars"
+          owner:  "{{ file_owner }}"
+          group:  "{{ file_group }}"
+          mode: 0777
+          force: yes
+      - name: copy wp-content uploads 
+        shell: "{{ base_path }}/{{ user_id }}/scripts/upload-copy.sh"
+        args:
+          executable: /bin/bash
+      - name: mysql database
+        shell: "{{ base_path }}/{{ user_id }}/scripts/mysql/mysql.sh"
+        args:
+          executable: /bin/bash
+      - name: terraform apply 
+        terraform:
+          project_path: '{{ terraform_project_dir }}'
+          state: present
+          variables_file: '{{ base_path }}/{{ user_id }}/scripts/{{ user_id }}-service.tfvars'
+          workspace: '{{ user_id }}'
+  vars:
+      - file_owner: root
+      - file_group: root
+      - base_path: /mnt/efs/funnel 
+      - user_id: prashant006
+      - user_email: prashant006@gmail.com
+      - domain_name: kwikfunnels.tk
+      - user_password: prashant006
+      - db_password: prashant006
+      - site_protocol: http
+      - s3_url: s3://kwikfunnels-deployment/uploads.tar.gz
+      - s3_key_name: uploads.tar.gz
+      - s3_url_db: s3://kwikfunnels-deployment/database.sql
+      - desire_count: 1
+      - db_endpoint: privatefunneldb.cuxinecb6roo.us-east-1.rds.amazonaws.com
+      - docker_image: 892867301607.dkr.ecr.us-east-1.amazonaws.com/funnel:4
+      - zone_id: ZF4ISLZR3E3UI
+      - alb_priority: 101
+      - terraform_project_dir: /home/ubuntu/terraform/service

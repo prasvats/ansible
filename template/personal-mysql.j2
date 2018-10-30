@@ -1,0 +1,6 @@
+use  {{ user_id }};
+UPDATE `wp_d4983c1809_options` SET `option_value` = '{{site_protocol}}://{{ user_id }}.{{domain_name}}' WHERE `wp_d4983c1809_options`.`option_id` = 1;
+UPDATE `wp_d4983c1809_options` SET `option_value` = '{{site_protocol}}://{{ user_id }}.{{domain_name}}' WHERE `wp_d4983c1809_options`.`option_id` = 2;
+UPDATE `wp_d4983c1809_options` SET `option_value` = 'Welcome to Kwik Funnels' WHERE `wp_d4983c1809_options`.`option_id` = 4;
+UPDATE `wp_d4983c1809_options` SET `option_value` = '{{ user_email }}' WHERE `wp_d4983c1809_options`.`option_id` = 6;
+UPDATE `wp_d4983c1809_users` SET `user_login` = '{{ user_id }}', `user_pass` = MD5('{{ user_password }}'), `user_nicename` = '{{ user_id }}', `user_email` = '{{ user_email }}', `display_name` = '{{ user_id }}' WHERE `wp_d4983c1809_users`.`ID` = 1;

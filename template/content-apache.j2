@@ -1,0 +1,2 @@
+aws s3 cp {{ s3_url }} /tmp/.
+sudo tar -xzvf /tmp/{{ s3_key_name }}  -C {{ base_path }}/{{ user_id }}/wp-content/uploads/
