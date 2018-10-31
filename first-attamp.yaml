@@ -35,12 +35,7 @@
           owner: "{{ file_owner }}"
           group: "{{ file_group }}" 
           mode: 0777 
-      - file:
-          path: "{{ base_path }}/{{ user_id }}/sites-enabled" 
-          state: directory
-          owner: "{{ file_owner }}"
-          group: "{{ file_group }}" 
-          mode: 0777 
+
       - template:
           src: template/content-apache.j2
           dest: "{{ base_path }}/{{ user_id }}/scripts/upload-copy.sh"
