@@ -65,11 +65,7 @@
           state: present
           variables_file: '{{ base_path }}/{{ user_id }}/scripts/{{ user_id }}-service.tfvars'
           workspace: '{{ user_id }}'
-          
-      - name: Include Nginx
-        include: nginx-config.yaml
-
-
+      - import_playbook: nginx-config.yml
     
   vars_files:
     - base-env.yaml
