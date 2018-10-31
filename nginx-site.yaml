@@ -8,10 +8,6 @@
        become: yes
        command: sudo nginx -t
        changed_when: false
-       register: nginxtest
-     - debug:
-       var: nginxtest
-       verbosity: 2
      - name: reload jenkins
        shell: "sudo service nginx reload"
        args:
