@@ -1,0 +1,18 @@
+- hosts: nginx.kwikfunnels.ael
+  tasks:
+     - name: copy conf to nginx
+       shell: "sudo cp /mnt/efs/site-enabled/{{ user_id }}.conf /etc/nginx/sites-enabled/"
+       args:
+        executable: /bin/bash
+     - name: Verify Nginx config
+       become: yes
+       command: sudo nginx -t
+       changed_when: false
+       register: nginxtest
+     - debug:
+       var: nginxtest
+       verbosity: 2
+     - name: reload jenkins
+       shell: "sudo service nginx reload"
+       args:
+        executable: /bin/bash
