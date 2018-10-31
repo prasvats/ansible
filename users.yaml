@@ -1,0 +1,48 @@
+- hosts: localhost
+  tasks:
+      - name: Creates Script Directory for MySQL
+        file: 
+          path: "{{ base_path }}/{{ user_id }}/scripts/mysql" 
+          state: directory
+          owner: "{{ file_owner }}"
+          group: "{{ file_group }}" 
+          mode: 0777 
+      - template:
+          src: template/personal-mysql.j2
+          dest: "{{ base_path }}/{{ user_id }}/scripts/mysql/personalize-db.sql"
+          owner:  "{{ file_owner }}"
+          group:  "{{ file_group }}"
+          mode: 0777
+          force: yes
+      - name: creating upload directory
+        file:
+          path: "{{ base_path }}/{{ user_id }}/wp-content/uploads" 
+          state: directory
+          owner: "{{ file_owner }}"
+          group: "{{ file_group }}" 
+          mode: 0777 
+      - file:
+          path: "{{ base_path }}/{{ user_id }}/sites-enabled" 
+          state: directory
+          owner: "{{ file_owner }}"
+          group: "{{ file_group }}" 
+          mode: 0777 
+      - name: terraform tfvars
+        template:
+          src: template/terraform-service.j2
+          dest: "{{ base_path }}/{{ user_id }}/scripts/{{ user_id }}-service.tfvars"
+          owner:  "{{ file_owner }}"
+          group:  "{{ file_group }}"
+          mode: 0777
+          force: yes
+      - name: terraform apply 
+        terraform:
+          project_path: '{{ terraform_project_dir }}'
+          state: present
+          variables_file: '{{ base_path }}/{{ user_id }}/scripts/{{ user_id }}-service.tfvars'
+          workspace: '{{ user_id }}'
+
+  vars_files:
+      - base-env.yaml
+      - env.yaml
+  

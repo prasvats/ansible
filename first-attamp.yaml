@@ -70,22 +70,9 @@
           state: present
           variables_file: '{{ base_path }}/{{ user_id }}/scripts/{{ user_id }}-service.tfvars'
           workspace: '{{ user_id }}'
-  vars:
-      - file_owner: root
-      - file_group: root
-      - base_path: /mnt/efs/funnel 
-      - user_id: prashant006
-      - user_email: prashant006@gmail.com
-      - domain_name: kwikfunnels.tk
-      - user_password: prashant006
-      - db_password: prashant006
-      - site_protocol: http
-      - s3_url: s3://kwikfunnels-deployment/uploads.tar.gz
-      - s3_key_name: uploads.tar.gz
-      - s3_url_db: s3://kwikfunnels-deployment/database.sql
-      - desire_count: 1
-      - db_endpoint: privatefunneldb.cuxinecb6roo.us-east-1.rds.amazonaws.com
-      - docker_image: 892867301607.dkr.ecr.us-east-1.amazonaws.com/funnel:4
-      - zone_id: ZF4ISLZR3E3UI
-      - alb_priority: 101
-      - terraform_project_dir: /home/ubuntu/terraform/service
+  
+    
+  vars_files:
+    - base-env.yaml
+    - env.yaml
+  

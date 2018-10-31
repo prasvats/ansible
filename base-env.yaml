@@ -1,0 +1,13 @@
+base_path: /mnt/efs/funnel 
+file_owner: root
+file_group: root
+s3_url: s3://kwikfunnels-deployment/uploads.tar.gz
+s3_key_name: uploads.tar.gz
+s3_url_db: s3://kwikfunnels-deployment/database.sql
+desire_count: 1
+db_endpoint: privatefunneldb.cuxinecb6roo.us-east-1.rds.amazonaws.com
+site_protocol: http
+docker_image: 892867301607.dkr.ecr.us-east-1.amazonaws.com/funnel:4
+zone_id: ZF4ISLZR3E3UI
+alb_priority: 101
+terraform_project_dir: /home/ubuntu/terraform/service
