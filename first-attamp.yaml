@@ -64,9 +64,9 @@
           project_path: '{{ terraform_project_dir }}'
           state: present
           variables_file: '{{ base_path }}/{{ user_id }}/scripts/{{ user_id }}-service.tfvars'
-          workspace: '{{ user_id }}'
-          
-      - import_playbook: nginx-config.yml
+          workspace: '{{ user_id }}'  
+      - name: import task
+        import_tasks: nginx-config.yaml
     
   vars_files:
     - base-env.yaml
