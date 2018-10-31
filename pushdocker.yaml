@@ -5,6 +5,11 @@
       pip:
         name: boto3
         state: present
+        
+    - name: docker login (must `--no-include-email`)
+      shell: "$(aws ecr get-login --region {{ region }} --no-include-email)"
+      args:
+        executable: /bin/bash
 
     - name: build docker image
       docker_image: 
@@ -12,10 +17,6 @@
         name: "{{ image_name }}"
         tag: "{{ image_version }}"
 
-    - name: docker login (must `--no-include-email`)
-      shell: "$(aws ecr get-login --region {{ region }} --no-include-email)"
-      args:
-        executable: /bin/bash
 
     - name: add tag
       docker_image:
