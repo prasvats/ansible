@@ -16,8 +16,8 @@
           mode: 0777
           force: yes
   vars:
-    file_owner: prashant
-    file_group: staff
-    base_path: /tmp/nginx/site-enabled
+    file_owner: root
+    file_group: root
+    base_path: /mnt/efs/site-enabled
   vars_files:
     - env.yaml
