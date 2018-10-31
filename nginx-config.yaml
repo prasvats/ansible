@@ -1,5 +1,4 @@
-- name: push docker image to AWS ECR Sample
-  hosts: localhost
+- hosts: localhost
   tasks:
       - name: Creates for Nginx Directory
         file: 
